@@ -1,0 +1,56 @@
+.layout-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.layout-container.dark {
+  background-color: #111827;
+}
+
+.main-content {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+/* Custom Scrollbar Styles */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* For Firefox */
+.main-content {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* Dark theme scrollbar */
+.layout-container.dark .main-content::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.layout-container.dark .main-content::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.layout-container.dark .main-content::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+.layout-container.dark .main-content {
+  scrollbar-color: #4b5563 #1f2937;
+}

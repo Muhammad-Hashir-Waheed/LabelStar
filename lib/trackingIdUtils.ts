@@ -1,8 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Check if environment variables are available
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('Missing Supabase environment variables in trackingIdUtils. Supabase client will not be initialized.');
+}
+
+// Create client only if environment variables are available
+const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 export interface UserTrackingAssignment {
   total_assigned: number;
@@ -14,6 +23,11 @@ export interface UserTrackingAssignment {
  * Get the current user's tracking ID assignment
  */
 export async function getUserTrackingAssignment(): Promise<UserTrackingAssignment | null> {
+  if (!supabase) {
+    console.error('Supabase client not initialized in trackingIdUtils');
+    return null;
+  }
+
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
@@ -45,6 +59,10 @@ export async function getUserTrackingAssignment(): Promise<UserTrackingAssignmen
  * Returns the tracking number if successful, throws error if no tracking IDs available
  */
 export async function consumeTrackingIdForLabel(labelId: string): Promise<string> {
+  if (!supabase) {
+    throw new Error('Supabase client not initialized in trackingIdUtils');
+  }
+
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {

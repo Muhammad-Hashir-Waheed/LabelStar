@@ -16,6 +16,11 @@ export async function ensureUserProfile(
   userId: string,
   userEmail: string
 ): Promise<UserProfile | null> {
+  if (!supabase) {
+    console.error('Supabase client not initialized');
+    return null;
+  }
+
   try {
     // First, try to get existing profile
     let { data: profile, error: profileError } = await supabase
@@ -82,6 +87,11 @@ export async function updateUserRole(
   userId: string,
   newRole: "user" | "admin"
 ): Promise<boolean> {
+  if (!supabase) {
+    console.error('Supabase client not initialized');
+    return false;
+  }
+
   try {
     const { error } = await supabase
       .from("profiles")

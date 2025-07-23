@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
 
 export async function POST(req: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase client not initialized' }, { status: 500 });
+  }
+
   const { user_id, total_labels_allowed } = await req.json();
   const { data, error } = await supabase.from('label_quotas').upsert([
     { user_id, total_labels_allowed }
@@ -11,6 +15,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase client not initialized' }, { status: 500 });
+  }
+
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get('user_id');
   let query = supabase.from('label_quotas').select('*');

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
 
 export async function POST(req: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase client not initialized' }, { status: 500 });
+  }
+
   const { user_id, label_data, tracking_number } = await req.json();
   const { data, error } = await supabase.from('shipping_labels').insert([{ 
     user_id, 
@@ -15,6 +19,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase client not initialized' }, { status: 500 });
+  }
+
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get('user_id');
   let query = supabase.from('shipping_labels').select('*').order('created_at', { ascending: false });
